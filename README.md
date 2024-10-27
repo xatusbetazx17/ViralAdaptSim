@@ -98,9 +98,28 @@ class ImmuneSystem:
             self.memory_cells = virus.genome  # "Remember" virus genome
             self.adaptive_response += 0.05
 
+# Define available sicknesses with different severity levels
+sickness_types = {
+    "Common Cold": {"mutation_rate": 0.05, "resistance_level": 0.1},
+    "Flu": {"mutation_rate": 0.1, "resistance_level": 0.3},
+    "Pneumonia": {"mutation_rate": 0.15, "resistance_level": 0.5},
+    "COVID-19": {"mutation_rate": 0.2, "resistance_level": 0.7},
+    "Ebola": {"mutation_rate": 0.3, "resistance_level": 0.9}
+}
+
+# Let the user choose a sickness
+print("Choose a sickness to simulate:")
+for i, sickness in enumerate(sickness_types.keys()):
+    print(f"{i+1}. {sickness}")
+
+choice = int(input("Enter the number of your choice: ")) - 1
+sickness_name = list(sickness_types.keys())[choice]
+sickness = sickness_types[sickness_name]
+print(f"Simulating {sickness_name} with mutation rate {sickness['mutation_rate']} and resistance level {sickness['resistance_level']}.")
+
 # Initialize simulation parameters
 generations = 100
-viruses = [Virus(f"Virus {i+1}", mutation_rate=0.1, resistance_level=0.1) for i in range(3)]
+virus = Virus(sickness_name, mutation_rate=sickness["mutation_rate"], resistance_level=sickness["resistance_level"])
 immune_system = ImmuneSystem()
 
 # Run the simulation
@@ -108,19 +127,18 @@ virus_resistance_history = []
 immune_effectiveness_history = []
 
 for generation in range(generations):
-    for virus in viruses:
-        virus.mutate()  # Mutate each virus
+    virus.mutate()  # Mutate the virus
 
-        # Immune system attempts to respond to each virus
-        effectiveness = immune_system.respond_to_virus(virus)
-        virus_resistance_history.append(virus.resistance_level)
-        immune_effectiveness_history.append(effectiveness)
+    # Immune system attempts to respond to the virus
+    effectiveness = immune_system.respond_to_virus(virus)
+    virus_resistance_history.append(virus.resistance_level)
+    immune_effectiveness_history.append(effectiveness)
 
 # Plot the results
 plt.figure(figsize=(12, 6))
 plt.plot(virus_resistance_history, label="Virus Resistance")
 plt.plot(immune_effectiveness_history, label="Immune Effectiveness", alpha=0.7)
-plt.title("Virus Resistance vs Immune Effectiveness over Generations")
+plt.title(f"Virus Resistance vs Immune Effectiveness over Generations ({sickness_name})")
 plt.xlabel("Generations")
 plt.ylabel("Effectiveness / Resistance")
 plt.legend()
@@ -136,6 +154,7 @@ subprocess.check_call([python_executable, "temp_simulation.py"])
 
 # Clean up the temporary file
 os.remove("temp_simulation.py")
+
 
 ```
 
