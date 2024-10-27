@@ -61,64 +61,69 @@ python_executable = os.path.join(venv_dir, "bin", "python")
 simulation_code = """
 import numpy as np
 import matplotlib.pyplot as plt
+import random
 
-# Define simulation parameters
-population_size = 20        # Number of organisms in the population
-genome_length = 10          # Length of each genome (number of bits)
-mutation_rate = 0.1         # Mutation probability per bit
-generations = 50            # Number of generations for the simulation
-target_genome = np.ones(genome_length)  # Target genome (array of ones)
+# Define Virus class with mutation and adaptation features
+class Virus:
+    def __init__(self, name, mutation_rate, resistance_level):
+        self.name = name
+        self.mutation_rate = mutation_rate
+        self.resistance_level = resistance_level  # How well it resists immune responses
+        self.genome = np.random.randint(0, 2, 10)  # Random initial genome
 
-# Initialize population with random genomes
-population = np.random.randint(0, 2, (population_size, genome_length))
+    def mutate(self):
+        mutation_mask = np.random.rand(len(self.genome)) < self.mutation_rate
+        self.genome = np.where(mutation_mask, 1 - self.genome, self.genome)
+        # Increase resistance level slightly with mutation
+        self.resistance_level += self.mutation_rate / 10
 
-# Fitness function: counts the matching bits with the target genome
-def fitness(genome):
-    return np.sum(genome == target_genome)
+# Define ImmuneSystem class that attacks and adapts
+class ImmuneSystem:
+    def __init__(self):
+        self.adaptive_response = 0.1  # Ability to adapt over time
+        self.memory_cells = []
 
-# Function to create a new generation through selection and mutation
-def create_next_generation(population):
-    # Calculate fitness for each organism
-    fitness_scores = np.array([fitness(genome) for genome in population])
+    def recognize_virus(self, virus):
+        match = np.sum(self.memory_cells == virus.genome) if len(self.memory_cells) > 0 else 0
+        return match
 
-    # Select top 50% of organisms based on fitness
-    selection_count = population_size // 2
-    selected_indices = np.argsort(fitness_scores)[-selection_count:]
-    selected_population = population[selected_indices]
+    def respond_to_virus(self, virus):
+        response_effectiveness = max(0, 1 - virus.resistance_level + self.adaptive_response)
+        if response_effectiveness < 0.5:
+            self.adapt(virus)
+        return response_effectiveness
 
-    # Generate new population by crossover and mutation
-    new_population = []
-    for _ in range(population_size):
-        # Select two parents randomly from the selected population
-        parents = selected_population[np.random.choice(selection_count, 2, replace=False)]
+    def adapt(self, virus):
+        if len(self.memory_cells) == 0 or not np.array_equal(self.memory_cells, virus.genome):
+            self.memory_cells = virus.genome  # "Remember" virus genome
+            self.adaptive_response += 0.05
 
-        # Perform crossover
-        crossover_point = np.random.randint(1, genome_length - 1)
-        child_genome = np.concatenate((parents[0][:crossover_point], parents[1][crossover_point:]))
-
-        # Apply mutation
-        mutation_mask = np.random.rand(genome_length) < mutation_rate
-        child_genome = np.where(mutation_mask, 1 - child_genome, child_genome)
-
-        new_population.append(child_genome)
-
-    return np.array(new_population)
+# Initialize simulation parameters
+generations = 100
+viruses = [Virus(f"Virus {i+1}", mutation_rate=0.1, resistance_level=0.1) for i in range(3)]
+immune_system = ImmuneSystem()
 
 # Run the simulation
-fitness_history = []
+virus_resistance_history = []
+immune_effectiveness_history = []
+
 for generation in range(generations):
-    # Calculate and store the average fitness of the current generation
-    avg_fitness = np.mean([fitness(genome) for genome in population])
-    fitness_history.append(avg_fitness)
+    for virus in viruses:
+        virus.mutate()  # Mutate each virus
 
-    # Generate the next generation
-    population = create_next_generation(population)
+        # Immune system attempts to respond to each virus
+        effectiveness = immune_system.respond_to_virus(virus)
+        virus_resistance_history.append(virus.resistance_level)
+        immune_effectiveness_history.append(effectiveness)
 
-# Display the final fitness history to observe evolution
-plt.plot(fitness_history)
-plt.title("Evolution of Average Fitness over Generations")
-plt.xlabel("Generation")
-plt.ylabel("Average Fitness")
+# Plot the results
+plt.figure(figsize=(12, 6))
+plt.plot(virus_resistance_history, label="Virus Resistance")
+plt.plot(immune_effectiveness_history, label="Immune Effectiveness", alpha=0.7)
+plt.title("Virus Resistance vs Immune Effectiveness over Generations")
+plt.xlabel("Generations")
+plt.ylabel("Effectiveness / Resistance")
+plt.legend()
 plt.show()
 """
 
