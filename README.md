@@ -29,6 +29,7 @@ python setup_and_run_simulation.py
 
 ```bash
 
+
 import sys
 import subprocess
 import os
@@ -65,8 +66,6 @@ import matplotlib.pyplot as plt
 import requests
 import json
 import plotly.graph_objects as go
-import tkinter as tk
-from tkinter import filedialog
 
 # Define Virus class with mutation and adaptation features
 class Virus:
@@ -111,34 +110,41 @@ sickness_types = {
     "Flu": {"mutation_rate": 0.1, "resistance_level": 0.3, "infectiousness": 0.7, "virulence": 0.4},
     "Pneumonia": {"mutation_rate": 0.15, "resistance_level": 0.5, "infectiousness": 0.6, "virulence": 0.6},
     "COVID-19": {"mutation_rate": 0.2, "resistance_level": 0.7, "infectiousness": 0.9, "virulence": 0.5},
-    "Ebola": {"mutation_rate": 0.3, "resistance_level": 0.9, "infectiousness": 0.5, "virulence": 0.9}
+    "Ebola": {"mutation_rate": 0.3, "resistance_level": 0.9, "infectiousness": 0.5, "virulence": 0.9},
+    "HIV": {"mutation_rate": 0.5, "resistance_level": 0.8, "infectiousness": 0.8, "virulence": 0.6}  # Replace 'High' with numeric values
 }
 
-# Function to update sickness data from local JSON file using file dialog
+# Function to update sickness data from URL or file
 def update_data_from_file():
-    root = tk.Tk()
-    root.withdraw()  # Hide the main tkinter window
-    file_path = filedialog.askopenfilename(
-        title="Select a JSON file to load sickness data",
-        filetypes=(("JSON files", "*.json"), ("All files", "*.*"))
-    )
-
-    if not file_path:
-        print("No file selected, using default values.")
-        return
-
     try:
-        with open(file_path, 'r') as f:
-            data = json.load(f)
-            for key, value in data.items():
-                if isinstance(value, dict):
-                    sickness_types[key] = value
-        print("Data successfully loaded from the selected file.")
-    except Exception as e:
-        print(f"Failed to load data from the file: {e}. Using default values.")
+        import tkinter as tk
+        from tkinter import filedialog
 
-# Ask if user wants to load data from a local file
-use_file = input("Would you like to load sickness data from a local JSON file? (y/n): ").lower()
+        root = tk.Tk()
+        root.withdraw()  # Hide the root window
+        file_path = filedialog.askopenfilename(title="Select a JSON file with sickness data", filetypes=(("JSON files", "*.json"), ("All files", "*.*")))
+
+        if file_path:
+            with open(file_path, 'r') as f:
+                data = json.load(f)
+                for key, value in data.items():
+                    if key in sickness_types:
+                        if isinstance(value, dict):
+                            sickness_types[key].update(value)
+                        else:
+                            print(f"Warning: Skipping non-dict value for {key}.")
+                    else:
+                        sickness_types[key] = value
+
+            print(f"Data updated successfully from {file_path}.")
+        else:
+            print("No file selected. Using default values.")
+
+    except Exception as e:
+        print(f"Failed to update data: {e}. Using default values.")
+
+# Ask if user wants to load data from a file
+use_file = input("Would you like to load sickness data from a JSON file? (y/n): ").lower()
 if use_file == 'y':
     update_data_from_file()
 
@@ -151,10 +157,18 @@ choice = int(input("Enter the number of your choice: ")) - 1
 sickness_name = list(sickness_types.keys())[choice]
 sickness = sickness_types[sickness_name]
 
+# Check for non-numeric values in sickness data and handle them
+def ensure_numeric(value, default):
+    try:
+        return float(value)
+    except (ValueError, TypeError):
+        print(f"Non-numeric value '{value}' detected, using default numeric value: {default}")
+        return float(default) if isinstance(default, (int, float)) else 0.1  # Set a generic default if necessary
+
 # Display and allow customization of parameters
 print(f"Simulating {sickness_name} with default mutation rate {sickness['mutation_rate']} and resistance level {sickness['resistance_level']}.")
-mutation_rate = float(input(f"Enter a custom mutation rate for {sickness_name} (default is {sickness['mutation_rate']}): ") or sickness["mutation_rate"])
-resistance_level = float(input(f"Enter a custom resistance level for {sickness_name} (default is {sickness['resistance_level']}): ") or sickness["resistance_level"])
+mutation_rate = ensure_numeric(input(f"Enter a custom mutation rate for {sickness_name} (default is {sickness['mutation_rate']}): ") or sickness["mutation_rate"], sickness["mutation_rate"])
+resistance_level = ensure_numeric(input(f"Enter a custom resistance level for {sickness_name} (default is {sickness['resistance_level']}): ") or sickness["resistance_level"], sickness["resistance_level"])
 
 # Initialize simulation parameters
 generations = 100
@@ -201,7 +215,6 @@ subprocess.check_call([python_executable, "temp_simulation.py"])
 
 # Clean up the temporary file
 os.remove("temp_simulation.py")
-
 
 
 ```
