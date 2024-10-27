@@ -32,6 +32,9 @@ python setup_and_run_simulation.py
 import sys
 import subprocess
 import os
+import json
+import tkinter as tk
+from tkinter import filedialog
 
 # Virtual environment directory
 venv_dir = "env"
@@ -62,6 +65,8 @@ import matplotlib.pyplot as plt
 import requests
 import json
 import plotly.graph_objects as go
+import tkinter as tk
+from tkinter import filedialog
 
 # Define Virus class with mutation and adaptation features
 class Virus:
@@ -109,24 +114,33 @@ sickness_types = {
     "Ebola": {"mutation_rate": 0.3, "resistance_level": 0.9, "infectiousness": 0.5, "virulence": 0.9}
 }
 
-# Function to update sickness data from URL
-def update_data_from_url(url):
-    try:
-        response = requests.get(url)
-        response.raise_for_status()
-        data = response.json()
-        for key, value in data.items():
-            if key in sickness_types:
-                sickness_types[key].update(value)
-        print("Data updated successfully from the provided URL.")
-    except Exception as e:
-        print(f"Failed to update data: {e}. Using default values.")
+# Function to update sickness data from local JSON file using file dialog
+def update_data_from_file():
+    root = tk.Tk()
+    root.withdraw()  # Hide the main tkinter window
+    file_path = filedialog.askopenfilename(
+        title="Select a JSON file to load sickness data",
+        filetypes=(("JSON files", "*.json"), ("All files", "*.*"))
+    )
 
-# Ask if user wants to load data from a URL
-use_url = input("Would you like to load sickness data from an external URL? (y/n): ").lower()
-if use_url == 'y':
-    url = input("Enter the URL to fetch data (e.g., https://example.com/data.json): ")
-    update_data_from_url(url)
+    if not file_path:
+        print("No file selected, using default values.")
+        return
+
+    try:
+        with open(file_path, 'r') as f:
+            data = json.load(f)
+            for key, value in data.items():
+                if isinstance(value, dict):
+                    sickness_types[key] = value
+        print("Data successfully loaded from the selected file.")
+    except Exception as e:
+        print(f"Failed to load data from the file: {e}. Using default values.")
+
+# Ask if user wants to load data from a local file
+use_file = input("Would you like to load sickness data from a local JSON file? (y/n): ").lower()
+if use_file == 'y':
+    update_data_from_file()
 
 # Let the user choose a sickness
 print("Choose a sickness to simulate:")
