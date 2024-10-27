@@ -46,9 +46,7 @@ def ensure_virtualenv():
 def install_in_virtualenv():
     # Path to Python executable in the virtual environment
     python_executable = os.path.join(venv_dir, "bin", "python")
-
-    # Install packages
-    subprocess.check_call([python_executable, "-m", "pip", "install", "numpy", "matplotlib", "requests"])
+    subprocess.check_call([python_executable, "-m", "pip", "install", "numpy", "matplotlib", "requests", "plotly", "dash"])
 
 # Set up and activate the virtual environment
 ensure_virtualenv()
@@ -57,19 +55,22 @@ install_in_virtualenv()
 # Activate the virtual environment's Python executable for further use
 python_executable = os.path.join(venv_dir, "bin", "python")
 
-# Run the actual simulation code within the virtual environment
+# Run the simulation code within the virtual environment
 simulation_code = """
 import numpy as np
 import matplotlib.pyplot as plt
 import requests
 import json
+import plotly.graph_objects as go
 
 # Define Virus class with mutation and adaptation features
 class Virus:
-    def __init__(self, name, mutation_rate, resistance_level):
+    def __init__(self, name, mutation_rate, resistance_level, infectiousness, virulence):
         self.name = name
         self.mutation_rate = mutation_rate
         self.resistance_level = resistance_level
+        self.infectiousness = infectiousness  # Higher infectiousness means faster spread
+        self.virulence = virulence  # Higher virulence means more severe impact on host
         self.genome = np.random.randint(0, 2, 10)
 
     def mutate(self):
@@ -79,16 +80,17 @@ class Virus:
 
 # Define ImmuneSystem class
 class ImmuneSystem:
-    def __init__(self):
-        self.adaptive_response = 0.1
+    def __init__(self, adaptation_rate):
+        self.adaptive_response = adaptation_rate
         self.memory_cells = []
+        self.strength = 0.8  # Represents overall immune system strength
 
     def recognize_virus(self, virus):
         match = np.sum(self.memory_cells == virus.genome) if len(self.memory_cells) > 0 else 0
         return match
 
     def respond_to_virus(self, virus):
-        response_effectiveness = max(0, 1 - virus.resistance_level + self.adaptive_response)
+        response_effectiveness = max(0, self.strength - virus.resistance_level + self.adaptive_response)
         if response_effectiveness < 0.5:
             self.adapt(virus)
         return response_effectiveness
@@ -100,11 +102,11 @@ class ImmuneSystem:
 
 # Define sicknesses with default values
 sickness_types = {
-    "Common Cold": {"mutation_rate": 0.05, "resistance_level": 0.1},
-    "Flu": {"mutation_rate": 0.1, "resistance_level": 0.3},
-    "Pneumonia": {"mutation_rate": 0.15, "resistance_level": 0.5},
-    "COVID-19": {"mutation_rate": 0.2, "resistance_level": 0.7},
-    "Ebola": {"mutation_rate": 0.3, "resistance_level": 0.9}
+    "Common Cold": {"mutation_rate": 0.05, "resistance_level": 0.1, "infectiousness": 0.6, "virulence": 0.2},
+    "Flu": {"mutation_rate": 0.1, "resistance_level": 0.3, "infectiousness": 0.7, "virulence": 0.4},
+    "Pneumonia": {"mutation_rate": 0.15, "resistance_level": 0.5, "infectiousness": 0.6, "virulence": 0.6},
+    "COVID-19": {"mutation_rate": 0.2, "resistance_level": 0.7, "infectiousness": 0.9, "virulence": 0.5},
+    "Ebola": {"mutation_rate": 0.3, "resistance_level": 0.9, "infectiousness": 0.5, "virulence": 0.9}
 }
 
 # Function to update sickness data from URL
@@ -142,28 +144,38 @@ resistance_level = float(input(f"Enter a custom resistance level for {sickness_n
 
 # Initialize simulation parameters
 generations = 100
-virus = Virus(sickness_name, mutation_rate=mutation_rate, resistance_level=resistance_level)
-immune_system = ImmuneSystem()
+virus = Virus(sickness_name, mutation_rate=mutation_rate, resistance_level=resistance_level, infectiousness=sickness["infectiousness"], virulence=sickness["virulence"])
+immune_system = ImmuneSystem(adaptation_rate=0.1)
 
 # Run the simulation
 virus_resistance_history = []
 immune_effectiveness_history = []
+infectiousness_history = []
+virulence_history = []
 
 for generation in range(generations):
     virus.mutate()  # Mutate the virus
     effectiveness = immune_system.respond_to_virus(virus)
     virus_resistance_history.append(virus.resistance_level)
     immune_effectiveness_history.append(effectiveness)
+    infectiousness_history.append(virus.infectiousness)
+    virulence_history.append(virus.virulence)
 
-# Plot the results
-plt.figure(figsize=(12, 6))
-plt.plot(virus_resistance_history, label="Virus Resistance")
-plt.plot(immune_effectiveness_history, label="Immune Effectiveness", alpha=0.7)
-plt.title(f"Virus Resistance vs Immune Effectiveness over Generations ({sickness_name})")
-plt.xlabel("Generations")
-plt.ylabel("Effectiveness / Resistance")
-plt.legend()
-plt.show()
+# Plot the results with Plotly
+fig = go.Figure()
+fig.add_trace(go.Scatter(x=list(range(generations)), y=virus_resistance_history, mode='lines', name='Virus Resistance'))
+fig.add_trace(go.Scatter(x=list(range(generations)), y=immune_effectiveness_history, mode='lines', name='Immune Effectiveness'))
+fig.add_trace(go.Scatter(x=list(range(generations)), y=infectiousness_history, mode='lines', name='Infectiousness'))
+fig.add_trace(go.Scatter(x=list(range(generations)), y=virulence_history, mode='lines', name='Virulence'))
+
+fig.update_layout(
+    title=f"Virus and Immune System Dynamics for {sickness_name}",
+    xaxis_title="Generations",
+    yaxis_title="Levels",
+    legend=dict(x=0, y=1)
+)
+
+fig.show()
 """
 
 # Save the simulation code to a temporary file and execute it
@@ -176,17 +188,6 @@ subprocess.check_call([python_executable, "temp_simulation.py"])
 # Clean up the temporary file
 os.remove("temp_simulation.py")
 
-"""
-
-# Save the simulation code to a temporary file and execute it
-with open("temp_simulation.py", "w") as f:
-    f.write(simulation_code)
-
-# Run the simulation script within the virtual environment
-subprocess.check_call([python_executable, "temp_simulation.py"])
-
-# Clean up the temporary file
-os.remove("temp_simulation.py")
 
 
 ```
