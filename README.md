@@ -1,4 +1,4 @@
-### ViralAdaptSim
+## ViralAdaptSim
 
 ViralAdaptSim is a Python-based simulation that models viral adaptation and immune response interactions. The goal is to explore how viruses mutate and adapt in response to immune system pressures, creating a simulated environment that can aid research and education on immune dynamics, viral evolution, and pathogen behavior.
 
