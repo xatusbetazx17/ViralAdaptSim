@@ -1,94 +1,182 @@
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Major Human Diseases from Discovery to 2024</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            background-color: #f8f9fa;
-            line-height: 1.6;
-            color: #343a40;
-        }
-        .container {
-            width: 80%;
-            margin: auto;
-            overflow: hidden;
-        }
-        .disease {
-            background: #ffffff;
-            padding: 15px;
-            margin-bottom: 20px;
-            border-radius: 5px;
-            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-        }
-        .disease h2 {
-            color: #007bff;
-        }
-    </style>
-</head>
-<body>
-    <div class="container">
-        <h1>Major Human Diseases from Discovery to 2024</h1>
-        <p>This page provides a summary of major known human diseases, including important infectious diseases discovered from early human history until 2024. Below, you will find some of the significant diseases and their key characteristics.</p>
-
-        <div class="disease">
-            <h2>HIV (Human Immunodeficiency Virus)</h2>
-            <p><strong>Mutation Rate:</strong> High</p>
-            <p><strong>Resistance Level:</strong> Varies depending on treatment adherence</p>
-            <p><strong>Infectiousness:</strong> Transmitted through bodily fluids (e.g., blood, sexual contact)</p>
-            <p><strong>Virulence:</strong> Leads to AIDS if untreated, weakening the immune system severely</p>
-        </div>
-
-        <div class="disease">
-            <h2>MERS (Middle East Respiratory Syndrome)</h2>
-            <p><strong>Mutation Rate:</strong> 0.15</p>
-            <p><strong>Resistance Level:</strong> 0.5</p>
-            <p><strong>Infectiousness:</strong> 0.7</p>
-            <p><strong>Virulence:</strong> 0.6</p>
-        </div>
-
-        <div class="disease">
-            <h2>COVID-19 (Coronavirus Disease 2019)</h2>
-            <p><strong>Mutation Rate:</strong> Medium to High, depending on variant</p>
-            <p><strong>Resistance Level:</strong> Varies with immunity (vaccination or previous infection)</p>
-            <p><strong>Infectiousness:</strong> 0.9</p>
-            <p><strong>Virulence:</strong> 0.5 (varies with patient health and treatment)</p>
-        </div>
-
-        <div class="disease">
-            <h2>Influenza (Flu)</h2>
-            <p><strong>Mutation Rate:</strong> 0.1</p>
-            <p><strong>Resistance Level:</strong> 0.3</p>
-            <p><strong>Infectiousness:</strong> 0.7</p>
-            <p><strong>Virulence:</strong> 0.4</p>
-        </div>
-
-        <div class="disease">
-            <h2>Ebola</h2>
-            <p><strong>Mutation Rate:</strong> 0.3</p>
-            <p><strong>Resistance Level:</strong> 0.9</p>
-            <p><strong>Infectiousness:</strong> 0.5</p>
-            <p><strong>Virulence:</strong> 0.9</p>
-        </div>
-
-        <div class="disease">
-            <h2>Common Cold</h2>
-            <p><strong>Mutation Rate:</strong> 0.05</p>
-            <p><strong>Resistance Level:</strong> 0.1</p>
-            <p><strong>Infectiousness:</strong> 0.6</p>
-            <p><strong>Virulence:</strong> 0.2</p>
-        </div>
-
-        <div class="disease">
-            <h2>Pneumonia</h2>
-            <p><strong>Mutation Rate:</strong> 0.15</p>
-            <p><strong>Resistance Level:</strong> 0.5</p>
-            <p><strong>Infectiousness:</strong> 0.6</p>
-            <p><strong>Virulence:</strong> 0.6</p>
-        </div>
-    </div>
-</body>
-</html>
+{
+    "HIV": {
+        "mutation_rate": "High",
+        "resistance_level": "Varies depending on treatment adherence",
+        "infectiousness": "Transmitted through bodily fluids (e.g., blood, sexual contact)",
+        "virulence": "Leads to AIDS if untreated, weakening the immune system severely"
+    },
+    "MERS": {
+        "mutation_rate": 0.15,
+        "resistance_level": 0.5,
+        "infectiousness": 0.7,
+        "virulence": 0.6
+    },
+    "COVID-19": {
+        "mutation_rate": "Medium to High, depending on variant",
+        "resistance_level": "Varies with immunity (vaccination or previous infection)",
+        "infectiousness": 0.9,
+        "virulence": 0.5
+    },
+    "Influenza": {
+        "mutation_rate": 0.1,
+        "resistance_level": 0.3,
+        "infectiousness": 0.7,
+        "virulence": 0.4
+    },
+    "Ebola": {
+        "mutation_rate": 0.3,
+        "resistance_level": 0.9,
+        "infectiousness": 0.5,
+        "virulence": 0.9
+    },
+    "Common Cold": {
+        "mutation_rate": 0.05,
+        "resistance_level": 0.1,
+        "infectiousness": 0.6,
+        "virulence": 0.2
+    },
+    "Pneumonia": {
+        "mutation_rate": 0.15,
+        "resistance_level": 0.5,
+        "infectiousness": 0.6,
+        "virulence": 0.6
+    },
+    "Tuberculosis": {
+        "mutation_rate": 0.02,
+        "resistance_level": 0.6,
+        "infectiousness": 0.8,
+        "virulence": 0.7
+    },
+    "Malaria": {
+        "mutation_rate": 0.1,
+        "resistance_level": 0.4,
+        "infectiousness": 0.9,
+        "virulence": 0.8
+    },
+    "Cholera": {
+        "mutation_rate": 0.1,
+        "resistance_level": 0.3,
+        "infectiousness": 0.7,
+        "virulence": 0.5
+    },
+    "Zika Virus": {
+        "mutation_rate": 0.15,
+        "resistance_level": 0.4,
+        "infectiousness": 0.8,
+        "virulence": 0.4
+    },
+    "Dengue Fever": {
+        "mutation_rate": 0.1,
+        "resistance_level": 0.3,
+        "infectiousness": 0.8,
+        "virulence": 0.6
+    },
+    "Polio": {
+        "mutation_rate": 0.05,
+        "resistance_level": 0.6,
+        "infectiousness": 0.7,
+        "virulence": 0.7
+    },
+    "Smallpox": {
+        "mutation_rate": 0.05,
+        "resistance_level": 0.7,
+        "infectiousness": 0.8,
+        "virulence": 0.9
+    },
+    "Measles": {
+        "mutation_rate": 0.1,
+        "resistance_level": 0.2,
+        "infectiousness": 0.95,
+        "virulence": 0.6
+    },
+    "Rabies": {
+        "mutation_rate": 0.01,
+        "resistance_level": 0.9,
+        "infectiousness": 0.6,
+        "virulence": 0.95
+    },
+    "Yellow Fever": {
+        "mutation_rate": 0.08,
+        "resistance_level": 0.5,
+        "infectiousness": 0.6,
+        "virulence": 0.8
+    },
+    "Typhoid Fever": {
+        "mutation_rate": 0.05,
+        "resistance_level": 0.4,
+        "infectiousness": 0.7,
+        "virulence": 0.5
+    },
+    "Hepatitis B": {
+        "mutation_rate": 0.1,
+        "resistance_level": 0.8,
+        "infectiousness": 0.7,
+        "virulence": 0.6
+    },
+    "Hepatitis C": {
+        "mutation_rate": 0.15,
+        "resistance_level": 0.7,
+        "infectiousness": 0.6,
+        "virulence": 0.7
+    },
+    "Plague (Bubonic)": {
+        "mutation_rate": 0.05,
+        "resistance_level": 0.6,
+        "infectiousness": 0.6,
+        "virulence": 0.9
+    },
+    "Leprosy": {
+        "mutation_rate": 0.01,
+        "resistance_level": 0.8,
+        "infectiousness": 0.5,
+        "virulence": 0.4
+    },
+    "Lyme Disease": {
+        "mutation_rate": 0.03,
+        "resistance_level": 0.5,
+        "infectiousness": 0.6,
+        "virulence": 0.4
+    },
+    "SARS (Severe Acute Respiratory Syndrome)": {
+        "mutation_rate": 0.2,
+        "resistance_level": 0.6,
+        "infectiousness": 0.8,
+        "virulence": 0.5
+    },
+    "Syphilis": {
+        "mutation_rate": 0.02,
+        "resistance_level": 0.7,
+        "infectiousness": 0.4,
+        "virulence": 0.5
+    },
+    "Anthrax": {
+        "mutation_rate": 0.01,
+        "resistance_level": 0.8,
+        "infectiousness": 0.4,
+        "virulence": 0.8
+    },
+    "Marburg Virus": {
+        "mutation_rate": 0.3,
+        "resistance_level": 0.5,
+        "infectiousness": 0.5,
+        "virulence": 0.9
+    },
+    "Chikungunya": {
+        "mutation_rate": 0.1,
+        "resistance_level": 0.3,
+        "infectiousness": 0.8,
+        "virulence": 0.4
+    },
+    "West Nile Virus": {
+        "mutation_rate": 0.1,
+        "resistance_level": 0.4,
+        "infectiousness": 0.7,
+        "virulence": 0.4
+    },
+    "Norovirus": {
+        "mutation_rate": 0.15,
+        "resistance_level": 0.3,
+        "infectiousness": 0.9,
+        "virulence": 0.3
+    }
+}
