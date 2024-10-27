@@ -36,6 +36,7 @@ import os
 import json
 import tkinter as tk
 from tkinter import filedialog
+import time
 
 # Virtual environment directory
 venv_dir = "env"
@@ -63,9 +64,9 @@ python_executable = os.path.join(venv_dir, "bin", "python")
 simulation_code = """
 import numpy as np
 import matplotlib.pyplot as plt
-import requests
 import json
 import plotly.graph_objects as go
+import time
 
 # Define Virus class with mutation and adaptation features
 class Virus:
@@ -111,10 +112,10 @@ sickness_types = {
     "Pneumonia": {"mutation_rate": 0.15, "resistance_level": 0.5, "infectiousness": 0.6, "virulence": 0.6},
     "COVID-19": {"mutation_rate": 0.2, "resistance_level": 0.7, "infectiousness": 0.9, "virulence": 0.5},
     "Ebola": {"mutation_rate": 0.3, "resistance_level": 0.9, "infectiousness": 0.5, "virulence": 0.9},
-    "HIV": {"mutation_rate": 0.5, "resistance_level": 0.8, "infectiousness": 0.8, "virulence": 0.6}  # Replace 'High' with numeric values
+    "HIV": {"mutation_rate": "High", "resistance_level": "Varies depending on treatment adherence", "infectiousness": 0.8, "virulence": 0.6}
 }
 
-# Function to update sickness data from URL or file
+# Function to update sickness data from file
 def update_data_from_file():
     try:
         import tkinter as tk
@@ -149,13 +150,22 @@ if use_file == 'y':
     update_data_from_file()
 
 # Let the user choose a sickness
+time.sleep(1)  # Pause to give users time
 print("Choose a sickness to simulate:")
 for i, sickness in enumerate(sickness_types.keys()):
     print(f"{i+1}. {sickness}")
 
-choice = int(input("Enter the number of your choice: ")) - 1
-sickness_name = list(sickness_types.keys())[choice]
-sickness = sickness_types[sickness_name]
+# Retry mechanism for selecting a valid sickness
+while True:
+    try:
+        choice = int(input("Enter the number of your choice: ")) - 1
+        if choice < 0 or choice >= len(sickness_types):
+            raise ValueError
+        sickness_name = list(sickness_types.keys())[choice]
+        sickness = sickness_types[sickness_name]
+        break
+    except (ValueError, IndexError):
+        print("Invalid choice. Please enter a valid number corresponding to a sickness.")
 
 # Check for non-numeric values in sickness data and handle them
 def ensure_numeric(value, default):
@@ -163,7 +173,12 @@ def ensure_numeric(value, default):
         return float(value)
     except (ValueError, TypeError):
         print(f"Non-numeric value '{value}' detected, using default numeric value: {default}")
-        return float(default) if isinstance(default, (int, float)) else 0.1  # Set a generic default if necessary
+        # Handle non-numeric strings like "High" or "Varies..."
+        if value == "High":
+            return 0.5  # Assign an appropriate default
+        elif "Varies" in value:
+            return 0.5  # Assign a reasonable default
+        return float(default) if isinstance(default, (int, float)) else 0.1  # Generic fallback if necessary
 
 # Display and allow customization of parameters
 print(f"Simulating {sickness_name} with default mutation rate {sickness['mutation_rate']} and resistance level {sickness['resistance_level']}.")
