@@ -48,7 +48,7 @@ def install_in_virtualenv():
     python_executable = os.path.join(venv_dir, "bin", "python")
 
     # Install packages
-    subprocess.check_call([python_executable, "-m", "pip", "install", "numpy", "matplotlib"])
+    subprocess.check_call([python_executable, "-m", "pip", "install", "numpy", "matplotlib", "requests"])
 
 # Set up and activate the virtual environment
 ensure_virtualenv()
@@ -61,26 +61,26 @@ python_executable = os.path.join(venv_dir, "bin", "python")
 simulation_code = """
 import numpy as np
 import matplotlib.pyplot as plt
-import random
+import requests
+import json
 
 # Define Virus class with mutation and adaptation features
 class Virus:
     def __init__(self, name, mutation_rate, resistance_level):
         self.name = name
         self.mutation_rate = mutation_rate
-        self.resistance_level = resistance_level  # How well it resists immune responses
-        self.genome = np.random.randint(0, 2, 10)  # Random initial genome
+        self.resistance_level = resistance_level
+        self.genome = np.random.randint(0, 2, 10)
 
     def mutate(self):
         mutation_mask = np.random.rand(len(self.genome)) < self.mutation_rate
         self.genome = np.where(mutation_mask, 1 - self.genome, self.genome)
-        # Increase resistance level slightly with mutation
         self.resistance_level += self.mutation_rate / 10
 
-# Define ImmuneSystem class that attacks and adapts
+# Define ImmuneSystem class
 class ImmuneSystem:
     def __init__(self):
-        self.adaptive_response = 0.1  # Ability to adapt over time
+        self.adaptive_response = 0.1
         self.memory_cells = []
 
     def recognize_virus(self, virus):
@@ -95,10 +95,10 @@ class ImmuneSystem:
 
     def adapt(self, virus):
         if len(self.memory_cells) == 0 or not np.array_equal(self.memory_cells, virus.genome):
-            self.memory_cells = virus.genome  # "Remember" virus genome
+            self.memory_cells = virus.genome
             self.adaptive_response += 0.05
 
-# Define available sicknesses with different severity levels
+# Define sicknesses with default values
 sickness_types = {
     "Common Cold": {"mutation_rate": 0.05, "resistance_level": 0.1},
     "Flu": {"mutation_rate": 0.1, "resistance_level": 0.3},
@@ -106,6 +106,25 @@ sickness_types = {
     "COVID-19": {"mutation_rate": 0.2, "resistance_level": 0.7},
     "Ebola": {"mutation_rate": 0.3, "resistance_level": 0.9}
 }
+
+# Function to update sickness data from URL
+def update_data_from_url(url):
+    try:
+        response = requests.get(url)
+        response.raise_for_status()
+        data = response.json()
+        for key, value in data.items():
+            if key in sickness_types:
+                sickness_types[key].update(value)
+        print("Data updated successfully from the provided URL.")
+    except Exception as e:
+        print(f"Failed to update data: {e}. Using default values.")
+
+# Ask if user wants to load data from a URL
+use_url = input("Would you like to load sickness data from an external URL? (y/n): ").lower()
+if use_url == 'y':
+    url = input("Enter the URL to fetch data (e.g., https://example.com/data.json): ")
+    update_data_from_url(url)
 
 # Let the user choose a sickness
 print("Choose a sickness to simulate:")
@@ -115,11 +134,15 @@ for i, sickness in enumerate(sickness_types.keys()):
 choice = int(input("Enter the number of your choice: ")) - 1
 sickness_name = list(sickness_types.keys())[choice]
 sickness = sickness_types[sickness_name]
-print(f"Simulating {sickness_name} with mutation rate {sickness['mutation_rate']} and resistance level {sickness['resistance_level']}.")
+
+# Display and allow customization of parameters
+print(f"Simulating {sickness_name} with default mutation rate {sickness['mutation_rate']} and resistance level {sickness['resistance_level']}.")
+mutation_rate = float(input(f"Enter a custom mutation rate for {sickness_name} (default is {sickness['mutation_rate']}): ") or sickness["mutation_rate"])
+resistance_level = float(input(f"Enter a custom resistance level for {sickness_name} (default is {sickness['resistance_level']}): ") or sickness["resistance_level"])
 
 # Initialize simulation parameters
 generations = 100
-virus = Virus(sickness_name, mutation_rate=sickness["mutation_rate"], resistance_level=sickness["resistance_level"])
+virus = Virus(sickness_name, mutation_rate=mutation_rate, resistance_level=resistance_level)
 immune_system = ImmuneSystem()
 
 # Run the simulation
@@ -128,8 +151,6 @@ immune_effectiveness_history = []
 
 for generation in range(generations):
     virus.mutate()  # Mutate the virus
-
-    # Immune system attempts to respond to the virus
     effectiveness = immune_system.respond_to_virus(virus)
     virus_resistance_history.append(virus.resistance_level)
     immune_effectiveness_history.append(effectiveness)
@@ -143,6 +164,18 @@ plt.xlabel("Generations")
 plt.ylabel("Effectiveness / Resistance")
 plt.legend()
 plt.show()
+"""
+
+# Save the simulation code to a temporary file and execute it
+with open("temp_simulation.py", "w") as f:
+    f.write(simulation_code)
+
+# Run the simulation script within the virtual environment
+subprocess.check_call([python_executable, "temp_simulation.py"])
+
+# Clean up the temporary file
+os.remove("temp_simulation.py")
+
 """
 
 # Save the simulation code to a temporary file and execute it
