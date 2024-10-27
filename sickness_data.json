@@ -1,1 +1,94 @@
 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Major Human Diseases from Discovery to 2024</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f8f9fa;
+            line-height: 1.6;
+            color: #343a40;
+        }
+        .container {
+            width: 80%;
+            margin: auto;
+            overflow: hidden;
+        }
+        .disease {
+            background: #ffffff;
+            padding: 15px;
+            margin-bottom: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+        .disease h2 {
+            color: #007bff;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Major Human Diseases from Discovery to 2024</h1>
+        <p>This page provides a summary of major known human diseases, including important infectious diseases discovered from early human history until 2024. Below, you will find some of the significant diseases and their key characteristics.</p>
+
+        <div class="disease">
+            <h2>HIV (Human Immunodeficiency Virus)</h2>
+            <p><strong>Mutation Rate:</strong> High</p>
+            <p><strong>Resistance Level:</strong> Varies depending on treatment adherence</p>
+            <p><strong>Infectiousness:</strong> Transmitted through bodily fluids (e.g., blood, sexual contact)</p>
+            <p><strong>Virulence:</strong> Leads to AIDS if untreated, weakening the immune system severely</p>
+        </div>
+
+        <div class="disease">
+            <h2>MERS (Middle East Respiratory Syndrome)</h2>
+            <p><strong>Mutation Rate:</strong> 0.15</p>
+            <p><strong>Resistance Level:</strong> 0.5</p>
+            <p><strong>Infectiousness:</strong> 0.7</p>
+            <p><strong>Virulence:</strong> 0.6</p>
+        </div>
+
+        <div class="disease">
+            <h2>COVID-19 (Coronavirus Disease 2019)</h2>
+            <p><strong>Mutation Rate:</strong> Medium to High, depending on variant</p>
+            <p><strong>Resistance Level:</strong> Varies with immunity (vaccination or previous infection)</p>
+            <p><strong>Infectiousness:</strong> 0.9</p>
+            <p><strong>Virulence:</strong> 0.5 (varies with patient health and treatment)</p>
+        </div>
+
+        <div class="disease">
+            <h2>Influenza (Flu)</h2>
+            <p><strong>Mutation Rate:</strong> 0.1</p>
+            <p><strong>Resistance Level:</strong> 0.3</p>
+            <p><strong>Infectiousness:</strong> 0.7</p>
+            <p><strong>Virulence:</strong> 0.4</p>
+        </div>
+
+        <div class="disease">
+            <h2>Ebola</h2>
+            <p><strong>Mutation Rate:</strong> 0.3</p>
+            <p><strong>Resistance Level:</strong> 0.9</p>
+            <p><strong>Infectiousness:</strong> 0.5</p>
+            <p><strong>Virulence:</strong> 0.9</p>
+        </div>
+
+        <div class="disease">
+            <h2>Common Cold</h2>
+            <p><strong>Mutation Rate:</strong> 0.05</p>
+            <p><strong>Resistance Level:</strong> 0.1</p>
+            <p><strong>Infectiousness:</strong> 0.6</p>
+            <p><strong>Virulence:</strong> 0.2</p>
+        </div>
+
+        <div class="disease">
+            <h2>Pneumonia</h2>
+            <p><strong>Mutation Rate:</strong> 0.15</p>
+            <p><strong>Resistance Level:</strong> 0.5</p>
+            <p><strong>Infectiousness:</strong> 0.6</p>
+            <p><strong>Virulence:</strong> 0.6</p>
+        </div>
+    </div>
+</body>
+</html>
