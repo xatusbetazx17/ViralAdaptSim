@@ -23,7 +23,7 @@ Open a terminal and navigate to the directory where you saved the file.
 Run the Python file with the following command:
 
 ```bash
-python setup_and_run_simulation.py
+python virusevolve.py
 ```
 ## Setup and runsimulation
 
@@ -229,8 +229,6 @@ git clone https://github.com/YOUR_USERNAME/ViralAdaptSim.git
 cd ViralAdaptSim
 ```
 ## Run the Simulation Script:
-
-
 
 ```bash
 python virusevolve.py
